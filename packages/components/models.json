@@ -1215,6 +1215,27 @@
             ]
         },
         {
+            "name": "chatMiniMax",
+            "label": "MiniMax (OpenAI)",
+            "models": [
+                {
+                    "label": "MiniMax-M2",
+                    "name": "MiniMax-M2",
+                    "description": "MiniMax-M2 via OpenAI-compatible API",
+                    "input_cost": 0,
+                    "output_cost": 0
+                },
+                {
+                    "label": "MiniMax-M2-Stable",
+                    "name": "MiniMax-M2-Stable",
+                    "description": "MiniMax-M2-Stable via OpenAI-compatible API",
+                    "input_cost": 0,
+                    "output_cost": 0
+                }
+            ],
+            "regions": []
+        },
+        {
             "name": "chatOpenAI_LlamaIndex",
             "models": [
                 {

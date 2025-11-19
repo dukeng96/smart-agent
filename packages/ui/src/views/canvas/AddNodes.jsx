@@ -70,6 +70,11 @@ const blacklistForChatflowCanvas = {
     Memory: agentMemoryNodes
 }
 
+const allowedChatModelNodes = ['chatOpenAI', 'chatAnthropic', 'chatMiniMax']
+
+const filterAllowedChatModels = (nodes) =>
+    nodes.filter((nd) => nd.category !== 'Chat Models' || allowedChatModelNodes.includes(nd.name))
+
 const AddNodes = ({ nodesData, node, isAgentCanvas, isAgentflowv2, onFlowGenerated }) => {
     const theme = useTheme()
     const customization = useSelector((state) => state.customization)
@@ -218,11 +223,14 @@ const AddNodes = ({ nodesData, node, isAgentCanvas, isAgentflowv2, onFlowGenerat
 
     const getSearchedNodes = (value) => {
         if (isAgentCanvas) {
-            const nodes = nodesData.filter((nd) => !blacklistCategoriesForAgentCanvas.includes(nd.category))
+            const nodes = filterAllowedChatModels(
+                nodesData.filter((nd) => !blacklistCategoriesForAgentCanvas.includes(nd.category))
+            )
             nodes.push(...addException())
             return scoreAndSortNodes(nodes, value)
         }
         let nodes = nodesData.filter((nd) => nd.category !== 'Multi Agents' && nd.category !== 'Sequential Agents')
+        nodes = filterAllowedChatModels(nodes)
 
         for (const category in blacklistForChatflowCanvas) {
             const nodeNames = blacklistForChatflowCanvas[category]
@@ -260,9 +268,11 @@ const AddNodes = ({ nodesData, node, isAgentCanvas, isAgentflowv2, onFlowGenerat
     }
 
     const groupByCategory = (nodes, newTabValue, isFilter) => {
+        const filteredNodes = filterAllowedChatModels(nodes)
+
         if (isAgentCanvas) {
             const accordianCategories = {}
-            const result = nodes.reduce(function (r, a) {
+            const result = filteredNodes.reduce(function (r, a) {
                 r[a.category] = r[a.category] || []
                 r[a.category].push(a)
                 accordianCategories[a.category] = isFilter ? true : false
@@ -301,7 +311,7 @@ const AddNodes = ({ nodesData, node, isAgentCanvas, isAgentflowv2, onFlowGenerat
             accordianCategories['Agent Flows'] = true
             setCategoryExpanded(accordianCategories)
         } else {
-            const taggedNodes = groupByTags(nodes, newTabValue)
+            const taggedNodes = groupByTags(filteredNodes, newTabValue)
             const accordianCategories = {}
             const result = taggedNodes.reduce(function (r, a) {
                 r[a.category] = r[a.category] || []
