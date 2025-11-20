@@ -36,6 +36,7 @@ import MainCard from '@/ui-component/cards/MainCard'
 import Transitions from '@/ui-component/extended/Transitions'
 import { StyledFab } from '@/ui-component/button/StyledFab'
 import AgentflowGeneratorDialog from '@/ui-component/dialog/AgentflowGeneratorDialog'
+import { allowedChatModelNodes, filterAllowedChatModels } from '@/utils/chatModelFilters'
 
 // icons
 import { IconPlus, IconSearch, IconMinus, IconX, IconSparkles } from '@tabler/icons-react'
@@ -69,11 +70,6 @@ const exceptionsForAgentCanvas = {
 const blacklistForChatflowCanvas = {
     Memory: agentMemoryNodes
 }
-
-const allowedChatModelNodes = ['chatOpenAI', 'chatAnthropic', 'chatMiniMax']
-
-const filterAllowedChatModels = (nodes) =>
-    nodes.filter((nd) => nd.category !== 'Chat Models' || allowedChatModelNodes.includes(nd.name))
 
 const AddNodes = ({ nodesData, node, isAgentCanvas, isAgentflowv2, onFlowGenerated }) => {
     const theme = useTheme()

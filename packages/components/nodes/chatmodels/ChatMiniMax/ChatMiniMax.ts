@@ -1,9 +1,8 @@
 import { ChatOpenAI as LangchainChatOpenAI, ChatOpenAIFields } from '@langchain/openai'
 import { BaseCache } from '@langchain/core/caches'
-import { INode, INodeData, INodeOptionsValue, INodeParams } from '../../../src/Interface'
+import { INode, INodeData, INodeParams } from '../../../src/Interface'
 import { getBaseClasses } from '../../../src/utils'
 import { ChatOpenAI } from '../ChatOpenAI/FlowiseChatOpenAI'
-import { getModels, MODEL_TYPE } from '../../../src/modelLoader'
 import { HttpsProxyAgent } from 'https-proxy-agent'
 
 const DEFAULT_MINIMAX_BASE_PATH = 'https://api.minimax.io/v1'
@@ -43,8 +42,11 @@ class ChatMiniMax_ChatModels implements INode {
             {
                 label: 'Model Name',
                 name: 'modelName',
-                type: 'asyncOptions',
-                loadMethod: 'listModels',
+                type: 'options',
+                options: [
+                    { label: 'MiniMax-M2', name: 'MiniMax-M2' },
+                    { label: 'MiniMax-M2-Stable', name: 'MiniMax-M2-Stable' }
+                ],
                 default: 'MiniMax-M2'
             },
             {
@@ -135,13 +137,6 @@ class ChatMiniMax_ChatModels implements INode {
                 additionalParams: true
             }
         ]
-    }
-
-    //@ts-ignore
-    loadMethods = {
-        async listModels(): Promise<INodeOptionsValue[]> {
-            return await getModels(MODEL_TYPE.CHAT, 'chatMiniMax')
-        }
     }
 
     async init(nodeData: INodeData): Promise<any> {

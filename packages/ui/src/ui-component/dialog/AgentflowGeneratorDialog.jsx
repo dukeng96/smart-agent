@@ -18,6 +18,7 @@ import { baseURL } from '@/store/constant'
 import { initNode, showHideInputParams } from '@/utils/genericHelper'
 import DocStoreInputHandler from '@/views/docstore/DocStoreInputHandler'
 import useApi from '@/hooks/useApi'
+import { filterAllowedChatModels } from '@/utils/chatModelFilters'
 
 const defaultInstructions = [
     {
@@ -66,10 +67,11 @@ const AgentflowGeneratorDialog = ({ show, dialogProps, onCancel, onConfirm }) =>
 
     useEffect(() => {
         if (getChatModelsApi.data) {
-            setChatModelsComponents(getChatModelsApi.data)
+            const filteredChatModels = filterAllowedChatModels(getChatModelsApi.data)
+            setChatModelsComponents(filteredChatModels)
 
             // Set options
-            const options = getChatModelsApi.data.map((chatModel) => ({
+            const options = filteredChatModels.map((chatModel) => ({
                 label: chatModel.label,
                 name: chatModel.name,
                 imageSrc: `${baseURL}/api/v1/node-icon/${chatModel.name}`

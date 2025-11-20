@@ -56,6 +56,7 @@ import { SET_CHATFLOW, closeSnackbar as closeSnackbarAction, enqueueSnackbar as 
 // Utils
 import { initNode, showHideInputParams } from '@/utils/genericHelper'
 import useNotifier from '@/utils/useNotifier'
+import { filterAllowedChatModels } from '@/utils/chatModelFilters'
 import { toolAgentFlow } from './toolAgentFlow'
 
 // ===========================|| CustomAssistantConfigurePreview ||=========================== //
@@ -731,10 +732,11 @@ const CustomAssistantConfigurePreview = () => {
 
     useEffect(() => {
         if (getChatModelsApi.data) {
-            setChatModelsComponents(getChatModelsApi.data)
+            const filteredChatModels = filterAllowedChatModels(getChatModelsApi.data)
+            setChatModelsComponents(filteredChatModels)
 
             // Set options
-            const options = getChatModelsApi.data.map((chatModel) => ({
+            const options = filteredChatModels.map((chatModel) => ({
                 label: chatModel.label,
                 name: chatModel.name,
                 imageSrc: `${baseURL}/api/v1/node-icon/${chatModel.name}`

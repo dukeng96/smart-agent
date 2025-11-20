@@ -75,6 +75,7 @@ import {
     getAvailableNodesForVariable
 } from '@/utils/genericHelper'
 import useNotifier from '@/utils/useNotifier'
+import { filterAllowedChatModels } from '@/utils/chatModelFilters'
 
 // const
 import { baseURL, FLOWISE_CREDENTIAL_ID } from '@/store/constant'
@@ -546,7 +547,7 @@ const NodeInputHandler = ({
         try {
             const resp = await assistantsApi.getChatModels()
             if (resp.data) {
-                const chatModels = resp.data ?? []
+                const chatModels = filterAllowedChatModels(resp.data ?? [])
                 const chatModelsOptions = chatModels.map((model) => ({
                     name: model.name,
                     label: model.label,
