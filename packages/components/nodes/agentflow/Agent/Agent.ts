@@ -64,6 +64,8 @@ interface ISimpliefiedTool {
     }
 }
 
+const ALLOWED_CHAT_MODEL_NODES = ['chatOpenAI', 'chatAnthropic', 'chatMiniMax']
+
 class Agent_Agentflow implements INode {
     label: string
     name: string
@@ -433,6 +435,9 @@ class Agent_Agentflow implements INode {
                 const componentNode = componentNodes[nodeName]
                 if (componentNode.category === 'Chat Models') {
                     if (componentNode.tags?.includes('LlamaIndex')) {
+                        continue
+                    }
+                    if (!ALLOWED_CHAT_MODEL_NODES.includes(nodeName)) {
                         continue
                     }
                     returnOptions.push({

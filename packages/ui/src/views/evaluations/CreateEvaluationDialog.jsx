@@ -47,6 +47,7 @@ import assistantsApi from '@/api/assistants'
 
 // utils
 import useNotifier from '@/utils/useNotifier'
+import { filterAllowedChatModels } from '@/utils/chatModelFilters'
 
 // const
 import { evaluators as evaluatorsOptions } from '../evaluators/evaluatorConstant'
@@ -255,7 +256,7 @@ const CreateEvaluationDialog = ({ show, dialogProps, onCancel, onConfirm }) => {
         if (getNodesByCategoryApi.data) {
             const llmNodes = []
             try {
-                const nodes = getNodesByCategoryApi.data
+                const nodes = filterAllowedChatModels(getNodesByCategoryApi.data)
                 llmNodes.push({
                     label: 'No Grading',
                     name: 'no_grading',

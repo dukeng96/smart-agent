@@ -87,6 +87,7 @@ import { enqueueSnackbar as enqueueSnackbarAction, closeSnackbar as closeSnackba
 import { isValidURL, removeDuplicateURL, setLocalStorageChatflow, getLocalStorageChatflow } from '@/utils/genericHelper'
 import useNotifier from '@/utils/useNotifier'
 import FollowUpPromptsCard from '@/ui-component/cards/FollowUpPromptsCard'
+import { stripThinkTags } from '@/utils/messageUtils'
 
 // History
 import { ChatInputHistory } from './ChatInputHistory'
@@ -2396,6 +2397,9 @@ const ChatMessage = ({ open, chatflowid, isAgentCanvas, isDialog, previews, setP
                 <div id='messagelist' className={'messagelist'}>
                     {messages &&
                         messages.map((message, index) => {
+                            const rawMessageText = typeof message.message === 'string' ? message.message : ''
+                            const displayMessage =
+                                message.type === 'apiMessage' ? stripThinkTags(rawMessageText) : rawMessageText
                             return (
                                 // The latest message sent by the user will be animated while waiting for a response
                                 <Box
@@ -2638,13 +2642,13 @@ const ChatMessage = ({ open, chatflowid, isAgentCanvas, isDialog, previews, setP
                                                         </Box>
                                                     </form>
                                                 </Box>
-                                            ) : (
-                                                <>
-                                                    <MemoizedReactMarkdown chatflowid={chatflowid} isFullWidth={isDialog}>
-                                                        {message.message}
-                                                    </MemoizedReactMarkdown>
-                                                </>
-                                            )}
+                                                ) : (
+                                                    <>
+                                                        <MemoizedReactMarkdown chatflowid={chatflowid} isFullWidth={isDialog}>
+                                                            {displayMessage}
+                                                        </MemoizedReactMarkdown>
+                                                    </>
+                                                )}
                                         </div>
                                         {message.fileAnnotations && (
                                             <div
