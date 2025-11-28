@@ -1,0 +1,15 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Nền tối -->
+  <rect width="160" height="160" rx="32" fill="#050816"/>
+  <!-- Vòng tròn nền -->
+  <circle cx="80" cy="70" r="34" fill="#007BFF"/>
+  <!-- Bong bóng chat -->
+  <path d="M62 70C62 62.8203 67.8203 57 75 57H85C92.1797 57 98 62.8203 98 70C98 77.1797 92.1797 83 85 83H79L72 90V83H75C67.8203 83 62 77.1797 62 70Z" fill="#FFFFFF"/>
+  <!-- Dấu tick VNPT-style -->
+  <path d="M68 106L77 117L96 94" stroke="#00C794" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Chữ VNPT -->
+  <text x="80" y="135" text-anchor="middle" fill="#FFFFFF" font-size="14"
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="600">
+    VNPT AI
+  </text>
+</svg>
