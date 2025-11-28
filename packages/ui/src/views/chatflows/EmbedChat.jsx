@@ -109,9 +109,9 @@ export const defaultThemeConfig = {
     },
     disclaimer: {
         title: 'Disclaimer',
-        message: 'By using this chatbot, you agree to the <a target="_blank" href="https://flowiseai.com/terms">Terms & Condition</a>',
+        message: 'By using this chatbot, you agree to the <a target="_blank" href="https://vnpt.com.vn/">Terms & Conditions</a>',
         textColor: 'black',
-        buttonColor: '#3b82f6',
+        buttonColor: '#007bff',
         buttonText: 'Start Chatting',
         buttonTextColor: 'white',
         blurredBackgroundColor: 'rgba(0, 0, 0, 0.4)',
@@ -121,8 +121,8 @@ export const defaultThemeConfig = {
     chatWindow: {
         showTitle: true,
         showAgentMessages: true,
-        title: 'Flowise Bot',
-        titleAvatarSrc: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/svg/google-messages.svg',
+        title: 'VNPT SmartAgent Bot',
+        titleAvatarSrc: '/vnpt-smartagent-logo.svg',
         welcomeMessage: 'Hello! This is custom welcome message',
         errorMessage: 'This is a custom error message',
         backgroundColor: '#ffffff',
@@ -151,7 +151,7 @@ export const defaultThemeConfig = {
             placeholder: 'Type your question',
             backgroundColor: '#ffffff',
             textColor: '#303235',
-            sendButtonColor: '#3B81F6',
+            sendButtonColor: '#007bff',
             maxChars: 50,
             maxCharsWarningMessage: 'You exceeded the characters limit. Please input less than 50 characters.',
             autoFocus: true,
@@ -170,8 +170,8 @@ export const defaultThemeConfig = {
         footer: {
             textColor: '#303235',
             text: 'Powered by',
-            company: 'Flowise',
-            companyLink: 'https://flowiseai.com'
+            company: 'VNPT SmartAgent',
+            companyLink: 'https://vnpt.com.vn/'
         }
     }
 }
