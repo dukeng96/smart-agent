@@ -1,15 +1,9 @@
-<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Nền tối -->
-  <rect width="160" height="160" rx="32" fill="#050816"/>
-  <!-- Vòng tròn nền -->
-  <circle cx="80" cy="70" r="34" fill="#007BFF"/>
-  <!-- Bong bóng chat -->
-  <path d="M62 70C62 62.8203 67.8203 57 75 57H85C92.1797 57 98 62.8203 98 70C98 77.1797 92.1797 83 85 83H79L72 90V83H75C67.8203 83 62 77.1797 62 70Z" fill="#FFFFFF"/>
-  <!-- Dấu tick VNPT-style -->
-  <path d="M68 106L77 117L96 94" stroke="#00C794" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Chữ VNPT -->
-  <text x="80" y="135" text-anchor="middle" fill="#FFFFFF" font-size="14"
-        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-weight="600">
-    VNPT AI
-  </text>
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" rx="24" fill="#007BFF"/>
+  <path d="M34 66C34 49.4315 47.4315 36 64 36H70C80.4934 36 89 44.5066 89 55C89 65.4934 80.4934 74 70 74H62L50 86V74H52C47.0294 74 34 73 34 66Z" fill="#00C794"/>
+  <circle cx="56" cy="58" r="4" fill="white"/>
+  <circle cx="74" cy="58" r="4" fill="white"/>
+  <path d="M58 58C58 59.1046 57.1046 60 56 60C54.8954 60 54 59.1046 54 58C54 56.8954 54.8954 56 56 56C57.1046 56 58 56.8954 58 58Z" fill="#0056CC"/>
+  <path d="M76 58C76 59.1046 75.1046 60 74 60C72.8954 60 72 59.1046 72 58C72 56.8954 72.8954 56 74 56C75.1046 56 76 56.8954 76 58Z" fill="#0056CC"/>
+  <path d="M62 70C64.5 72 69.5 72 72 70" stroke="white" stroke-width="4" stroke-linecap="round"/>
 </svg>

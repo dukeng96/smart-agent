@@ -19,17 +19,17 @@ class ChatMiniMax_ChatModels implements INode {
     inputs: INodeParams[]
 
     constructor() {
-        this.label = 'ChatMiniMax'
+        this.label = 'VNPTAI.IO'
         this.name = 'chatMiniMax'
         this.version = 1.0
         this.type = 'ChatMiniMax'
-        this.icon = 'minimax.svg'
+        this.icon = 'vnptai.svg'
         this.category = 'Chat Models'
-        this.description = 'MiniMax Chat models exposed via their OpenAI-compatible API'
+        this.description = 'VNPTAI.IO Medium model (powered by MiniMax OpenAI-compatible API)'
         this.baseClasses = [this.type, ...getBaseClasses(LangchainChatOpenAI)]
         this.inputs = [
             {
-                label: 'MiniMax API Key',
+                label: 'VNPTAI.IO API Key',
                 name: 'minimaxApiKey',
                 type: 'password'
             },
@@ -43,11 +43,8 @@ class ChatMiniMax_ChatModels implements INode {
                 label: 'Model Name',
                 name: 'modelName',
                 type: 'options',
-                options: [
-                    { label: 'MiniMax-M2', name: 'MiniMax-M2' },
-                    { label: 'MiniMax-M2-Stable', name: 'MiniMax-M2-Stable' }
-                ],
-                default: 'MiniMax-M2'
+                options: [{ label: 'VNPTAI.IO-Medium-v1', name: 'VNPTAI.IO-Medium-v1' }],
+                default: 'VNPTAI.IO-Medium-v1'
             },
             {
                 label: 'Temperature',
@@ -142,11 +139,11 @@ class ChatMiniMax_ChatModels implements INode {
     async init(nodeData: INodeData): Promise<any> {
         const minimaxApiKey = nodeData.inputs?.minimaxApiKey as string
         if (!minimaxApiKey) {
-            throw new Error('MiniMax API Key is required')
+            throw new Error('VNPTAI.IO API Key is required')
         }
 
         const temperature = nodeData.inputs?.temperature as string
-        const modelName = nodeData.inputs?.modelName as string
+        const modelName = (nodeData.inputs?.modelName as string) || 'VNPTAI.IO-Medium-v1'
         const maxTokens = nodeData.inputs?.maxTokens as string
         const topP = nodeData.inputs?.topP as string
         const frequencyPenalty = nodeData.inputs?.frequencyPenalty as string
@@ -159,9 +156,11 @@ class ChatMiniMax_ChatModels implements INode {
         const baseOptions = nodeData.inputs?.baseOptions
         const cache = nodeData.inputs?.cache as BaseCache
 
+        const apiModelName = 'MiniMax-M2'
+
         const obj: ChatOpenAIFields = {
             temperature: parseFloat(temperature),
-            modelName,
+            modelName: apiModelName,
             openAIApiKey: minimaxApiKey,
             apiKey: minimaxApiKey,
             streaming: streaming ?? true
@@ -184,12 +183,13 @@ class ChatMiniMax_ChatModels implements INode {
             try {
                 parsedBaseOptions = typeof baseOptions === 'object' ? baseOptions : JSON.parse(baseOptions)
             } catch (exception) {
-                throw new Error("Invalid JSON in the ChatMiniMax's BaseOptions: " + exception)
+                throw new Error('Invalid JSON in the VNPTAI.IO BaseOptions: ' + exception)
             }
         }
 
         const configuration: any = {
-            baseURL: basePath || DEFAULT_MINIMAX_BASE_PATH
+            baseURL: basePath || DEFAULT_MINIMAX_BASE_PATH,
+            modelDisplayName: modelName
         }
 
         if (parsedBaseOptions) {

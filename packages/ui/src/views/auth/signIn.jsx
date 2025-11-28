@@ -192,7 +192,7 @@ const SignInPage = () => {
                         </Stack>
                     )}
                     <Stack sx={{ gap: 1 }}>
-                        <Typography variant='h1'>Sign In</Typography>
+                        <Typography variant='h1'>Sign In to VNPT SmartAgent</Typography>
                         {isCloud && (
                             <Typography variant='body2' sx={{ color: theme.palette.grey[600] }}>
                                 Don&apos;t have an account?{' '}
