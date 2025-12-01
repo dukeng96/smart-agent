@@ -13,6 +13,8 @@ import {
 import { AIMessageChunk, BaseMessageLike } from '@langchain/core/messages'
 import { DEFAULT_HUMAN_INPUT_DESCRIPTION, DEFAULT_HUMAN_INPUT_DESCRIPTION_HTML } from '../prompt'
 
+const ALLOWED_CHAT_MODEL_NODES = ['chatOpenAI', 'chatAnthropic', 'chatVNPT']
+
 class HumanInput_Agentflow implements INode {
     label: string
     name: string
@@ -119,6 +121,9 @@ class HumanInput_Agentflow implements INode {
                 const componentNode = componentNodes[nodeName]
                 if (componentNode.category === 'Chat Models') {
                     if (componentNode.tags?.includes('LlamaIndex')) {
+                        continue
+                    }
+                    if (!ALLOWED_CHAT_MODEL_NODES.includes(nodeName)) {
                         continue
                     }
                     returnOptions.push({

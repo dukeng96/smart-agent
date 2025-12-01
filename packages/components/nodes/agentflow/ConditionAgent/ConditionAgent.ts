@@ -10,6 +10,8 @@ import {
 import { CONDITION_AGENT_SYSTEM_PROMPT, DEFAULT_SUMMARIZER_TEMPLATE } from '../prompt'
 import { BaseChatModel } from '@langchain/core/language_models/chat_models'
 
+const ALLOWED_CHAT_MODEL_NODES = ['chatOpenAI', 'chatAnthropic', 'chatVNPT']
+
 class ConditionAgent_Agentflow implements INode {
     label: string
     name: string
@@ -188,6 +190,9 @@ class ConditionAgent_Agentflow implements INode {
                 const componentNode = componentNodes[nodeName]
                 if (componentNode.category === 'Chat Models') {
                     if (componentNode.tags?.includes('LlamaIndex')) {
+                        continue
+                    }
+                    if (!ALLOWED_CHAT_MODEL_NODES.includes(nodeName)) {
                         continue
                     }
                     returnOptions.push({
