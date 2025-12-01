@@ -15,6 +15,8 @@ import {
 import { processTemplateVariables } from '../../../src/utils'
 import { flatten } from 'lodash'
 
+const ALLOWED_CHAT_MODEL_NODES = ['chatOpenAI', 'chatAnthropic', 'chatVNPT']
+
 class LLM_Agentflow implements INode {
     label: string
     name: string
@@ -315,6 +317,9 @@ class LLM_Agentflow implements INode {
                 const componentNode = componentNodes[nodeName]
                 if (componentNode.category === 'Chat Models') {
                     if (componentNode.tags?.includes('LlamaIndex')) {
+                        continue
+                    }
+                    if (!ALLOWED_CHAT_MODEL_NODES.includes(nodeName)) {
                         continue
                     }
                     returnOptions.push({
