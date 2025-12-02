@@ -10,7 +10,7 @@ import {
 import { CONDITION_AGENT_SYSTEM_PROMPT, DEFAULT_SUMMARIZER_TEMPLATE } from '../prompt'
 import { BaseChatModel } from '@langchain/core/language_models/chat_models'
 
-const ALLOWED_CHAT_MODEL_NODES = ['chatOpenAI', 'chatAnthropic', 'chatVNPT']
+const ALLOWED_CHAT_MODEL_NODES = ['chatOpenAI', 'chatAnthropic', 'chatVNPT', 'chatVNPTAgent']
 
 class ConditionAgent_Agentflow implements INode {
     label: string
