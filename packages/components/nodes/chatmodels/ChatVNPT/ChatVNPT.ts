@@ -1,7 +1,7 @@
 import { ChatOpenAI as LangchainChatOpenAI, ChatOpenAIFields } from '@langchain/openai'
 import { BaseCache } from '@langchain/core/caches'
-import { INode, INodeData, INodeParams } from '../../../src/Interface'
-import { getBaseClasses } from '../../../src/utils'
+import { ICommonObject, INode, INodeData, INodeParams } from '../../../src/Interface'
+import { getBaseClasses, getCredentialData, getCredentialParam } from '../../../src/utils'
 import { ChatOpenAI } from '../ChatOpenAI/FlowiseChatOpenAI'
 import { HttpsProxyAgent } from 'https-proxy-agent'
 
@@ -16,17 +16,24 @@ class ChatVNPT_ChatModels implements INode {
     category: string
     description: string
     baseClasses: string[]
+    credential: INodeParams
     inputs: INodeParams[]
 
     constructor() {
         this.label = 'VNPT LLM'
         this.name = 'chatVNPT'
-        this.version = 1.0
+        this.version = 1.1
         this.type = 'ChatVNPT'
         this.icon = 'vnptai.svg'
         this.category = 'Chat Models'
         this.description = 'VNPT LLM models via OpenAI-compatible API'
         this.baseClasses = [this.type, ...getBaseClasses(LangchainChatOpenAI)]
+        this.credential = {
+            label: 'Connect Credential',
+            name: 'credential',
+            type: 'credential',
+            credentialNames: ['openAIApi']
+        }
         this.inputs = [
             {
                 label: 'VNPT Access Token',
@@ -108,9 +115,17 @@ class ChatVNPT_ChatModels implements INode {
         ]
     }
 
-    async init(nodeData: INodeData): Promise<any> {
-        const apiKey = nodeData.inputs?.vnptApiKey as string
-        if (!apiKey) throw new Error('VNPT Access Token is required')
+    async init(nodeData: INodeData, _: string, options: ICommonObject): Promise<any> {
+        if (nodeData.inputs?.credentialId) {
+            nodeData.credential = nodeData.inputs?.credentialId
+        }
+
+        const credentialData = nodeData.credential ? await getCredentialData(nodeData.credential, options) : null
+        const credentialApiKey = credentialData ? getCredentialParam('openAIApiKey', credentialData, nodeData) : ''
+        const manualApiKey = nodeData.inputs?.vnptApiKey as string
+        const apiKey = manualApiKey || credentialApiKey
+
+        if (!apiKey) throw new Error('VNPT Access Token or credential is required')
 
         const temperature = nodeData.inputs?.temperature as string
         const modelName = nodeData.inputs?.modelName as string
