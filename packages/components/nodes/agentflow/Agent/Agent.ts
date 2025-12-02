@@ -64,7 +64,7 @@ interface ISimpliefiedTool {
     }
 }
 
-const ALLOWED_CHAT_MODEL_NODES = ['chatOpenAI', 'chatAnthropic', 'chatVNPT']
+const ALLOWED_CHAT_MODEL_NODES = ['chatOpenAI', 'chatAnthropic', 'chatVNPT', 'chatVNPTAgent']
 
 class Agent_Agentflow implements INode {
     label: string
