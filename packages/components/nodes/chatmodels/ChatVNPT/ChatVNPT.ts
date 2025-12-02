@@ -127,7 +127,11 @@ class ChatVNPT_ChatModels implements INode {
             modelName,
             openAIApiKey: apiKey,
             apiKey,
-            streaming: streaming ?? true
+            streaming: streaming ?? true,
+            // VNPT's streaming responses already include usage in each chunk. Asking for
+            // stream usage metadata leads to duplicate numeric fields being merged and
+            // LangChain warning spam, so disable it for this provider.
+            streamUsage: false
         }
 
         if (maxTokens) obj.maxTokens = parseInt(maxTokens, 10)
