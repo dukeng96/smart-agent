@@ -15,7 +15,7 @@ import {
 import { processTemplateVariables } from '../../../src/utils'
 import { flatten } from 'lodash'
 
-const ALLOWED_CHAT_MODEL_NODES = ['chatOpenAI', 'chatAnthropic', 'chatVNPT']
+const ALLOWED_CHAT_MODEL_NODES = ['chatOpenAI', 'chatAnthropic', 'chatVNPT', 'chatVNPTAgent']
 
 class LLM_Agentflow implements INode {
     label: string

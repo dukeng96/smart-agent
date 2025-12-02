@@ -13,7 +13,7 @@ import {
 import { AIMessageChunk, BaseMessageLike } from '@langchain/core/messages'
 import { DEFAULT_HUMAN_INPUT_DESCRIPTION, DEFAULT_HUMAN_INPUT_DESCRIPTION_HTML } from '../prompt'
 
-const ALLOWED_CHAT_MODEL_NODES = ['chatOpenAI', 'chatAnthropic', 'chatVNPT']
+const ALLOWED_CHAT_MODEL_NODES = ['chatOpenAI', 'chatAnthropic', 'chatVNPT', 'chatVNPTAgent']
 
 class HumanInput_Agentflow implements INode {
     label: string

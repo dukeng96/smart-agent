@@ -1,0 +1,172 @@
+import { ChatOpenAI as LangchainChatOpenAI, ChatOpenAIFields } from '@langchain/openai'
+import { BaseCache } from '@langchain/core/caches'
+import { ICommonObject, INode, INodeData, INodeParams } from '../../../src/Interface'
+import { getBaseClasses, getCredentialData, getCredentialParam } from '../../../src/utils'
+import { FlowiseChatVNPT } from './FlowiseChatVNPT'
+import { HttpsProxyAgent } from 'https-proxy-agent'
+
+const DEFAULT_VNPT_BASE_PATH = 'https://assistant-stream.vnpt.vn/v1/'
+
+class ChatVNPTAgent_ChatModels implements INode {
+    label: string
+    name: string
+    version: number
+    type: string
+    icon: string
+    category: string
+    description: string
+    baseClasses: string[]
+    credential: INodeParams
+    inputs: INodeParams[]
+
+    constructor() {
+        this.label = 'ChatVNPT'
+        this.name = 'chatVNPTAgent'
+        this.version = 1.0
+        this.type = 'ChatVNPTAgent'
+        this.icon = 'vnptai.svg'
+        this.category = 'Chat Models'
+        this.description = 'VNPT LLM with streaming-aware tool calling'
+        this.baseClasses = [this.type, ...getBaseClasses(LangchainChatOpenAI)]
+        this.credential = {
+            label: 'Connect Credential',
+            name: 'credential',
+            type: 'credential',
+            credentialNames: ['openAIApi']
+        }
+        this.inputs = [
+            {
+                label: 'VNPT Access Token',
+                name: 'vnptApiKey',
+                type: 'password'
+            },
+            {
+                label: 'Cache',
+                name: 'cache',
+                type: 'BaseCache',
+                optional: true
+            },
+            {
+                label: 'Model Name',
+                name: 'modelName',
+                type: 'options',
+                options: [
+                    { label: 'llm-small-v4', name: 'llm-small-v4' },
+                    { label: 'llm-medium-v4', name: 'llm-medium-v4' },
+                    { label: 'llm-large-v4', name: 'llm-large-v4' }
+                ],
+                default: 'llm-medium-v4'
+            },
+            {
+                label: 'Temperature',
+                name: 'temperature',
+                type: 'number',
+                step: 0.1,
+                default: 0.8,
+                optional: true
+            },
+            {
+                label: 'Streaming',
+                name: 'streaming',
+                type: 'boolean',
+                default: true,
+                optional: true,
+                additionalParams: true
+            },
+            {
+                label: 'Max Tokens',
+                name: 'maxTokens',
+                type: 'number',
+                step: 1,
+                optional: true,
+                additionalParams: true
+            },
+            {
+                label: 'Top Probability',
+                name: 'topP',
+                type: 'number',
+                step: 0.1,
+                optional: true,
+                additionalParams: true
+            },
+            {
+                label: 'Timeout',
+                name: 'timeout',
+                type: 'number',
+                step: 1,
+                optional: true,
+                additionalParams: true
+            },
+            {
+                label: 'BasePath',
+                name: 'basepath',
+                type: 'string',
+                placeholder: DEFAULT_VNPT_BASE_PATH,
+                optional: true,
+                additionalParams: true
+            },
+            {
+                label: 'Proxy Url',
+                name: 'proxyUrl',
+                type: 'string',
+                optional: true,
+                additionalParams: true
+            }
+        ]
+    }
+
+    async init(nodeData: INodeData, _: string, options: ICommonObject): Promise<any> {
+        if (nodeData.inputs?.credentialId) {
+            nodeData.credential = nodeData.inputs?.credentialId
+        }
+
+        const credentialData = nodeData.credential ? await getCredentialData(nodeData.credential, options) : null
+        const credentialApiKey = credentialData ? getCredentialParam('openAIApiKey', credentialData, nodeData) : ''
+        const manualApiKey = nodeData.inputs?.vnptApiKey as string
+        const apiKey = manualApiKey || credentialApiKey
+
+        if (!apiKey) throw new Error('VNPT Access Token or credential is required')
+
+        const temperature = nodeData.inputs?.temperature as string
+        const modelName = nodeData.inputs?.modelName as string
+        const maxTokens = nodeData.inputs?.maxTokens as string
+        const topP = nodeData.inputs?.topP as string
+        const timeout = nodeData.inputs?.timeout as string
+        const streaming = nodeData.inputs?.streaming as boolean
+        const basePath = (nodeData.inputs?.basepath as string) || DEFAULT_VNPT_BASE_PATH
+        const proxyUrl = nodeData.inputs?.proxyUrl as string
+        const cache = nodeData.inputs?.cache as BaseCache
+
+        const obj: ChatOpenAIFields = {
+            temperature: temperature ? parseFloat(temperature) : 0.8,
+            modelName,
+            openAIApiKey: apiKey,
+            apiKey,
+            streaming: streaming ?? true,
+            // VNPT's streaming responses already include usage in each chunk. Asking for
+            // stream usage metadata leads to duplicate numeric fields being merged and
+            // LangChain warning spam, so disable it for this provider.
+            streamUsage: false
+        }
+
+        if (maxTokens) obj.maxTokens = parseInt(maxTokens, 10)
+        if (topP) obj.topP = parseFloat(topP)
+        if (timeout) obj.timeout = parseInt(timeout, 10)
+        if (cache) obj.cache = cache
+
+        const configuration: any = {
+            baseURL: basePath || DEFAULT_VNPT_BASE_PATH
+        }
+
+        if (proxyUrl) {
+            configuration.httpAgent = new HttpsProxyAgent(proxyUrl)
+        }
+
+        obj.configuration = configuration
+
+        const model = new FlowiseChatVNPT(nodeData.id, obj)
+        return model
+    }
+}
+
+module.exports = { nodeClass: ChatVNPTAgent_ChatModels }
